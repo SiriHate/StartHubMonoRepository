@@ -48,7 +48,7 @@ const App = () => {
                         <Route path="/password-recovery" element={<PasswordRecoveryPage />} />
                         <Route path="/change-password" element={<PasswordChangePage />} />
                         <Route path="/change-password/:token" element={<PasswordChangePage />} />
-                        <Route path="/confirm-registration" element={<ConfirmRegistrationPage />} />
+                        <Route path="/confirm-registration/:token" element={<ConfirmRegistrationPage />} />
                         <Route element={<PrivateRoute />}>
                             <Route path="/members/personal-account" element={<PersonalMemberAccount />} />
                             <Route path="/members/profile/:username" element={<MemberProfilePage />} />

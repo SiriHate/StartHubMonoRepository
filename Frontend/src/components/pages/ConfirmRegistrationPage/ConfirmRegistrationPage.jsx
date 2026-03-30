@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {useNavigate, useSearchParams} from 'react-router-dom';
+import {useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import {Helmet} from "react-helmet";
 import styles from "./ConfirmRegistrationPage.module.css";
 import config from "../../../config";
@@ -9,8 +9,9 @@ const ConfirmRegistrationPage = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [loading, setLoading] = useState(true);
     const [searchParams] = useSearchParams();
+    const { token: tokenFromPath } = useParams();
     const navigate = useNavigate();
-    const token = searchParams.get('token');
+    const token = tokenFromPath || searchParams.get('token');
     const isInitialized = useRef(false);
 
     useEffect(() => {
