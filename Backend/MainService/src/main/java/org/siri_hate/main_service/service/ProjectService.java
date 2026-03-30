@@ -38,8 +38,7 @@ public class ProjectService {
                           ProjectSubscriberService projectSubscriberService,
                           FileService fileService,
                           SearchMapper searchMapper
-    )
-    {
+    ) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
         this.projectCategoryService = projectCategoryService;
