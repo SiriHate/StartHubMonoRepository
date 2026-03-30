@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: ChatService
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chat_service
+    username: user
+    password: pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  aop:
+    proxy-target-class: false
+  kafka:
+    bootstrap-servers: localhost:9092
+
+server:
+  address: localhost
+  port: 8084
+
+logging:
+  level:
+    root: INFO
+
+minio:
+  endpoint: http://localhost:9000
+  region: us-east-1
+  accessKey: minio
+  secretKey: minio12345
+  chat_images_bucket: chat-images
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+notification:
+  topic:
+    chat-message: chat_message_notification_topic
+  service:
+    url: http://localhost:8082/api/v1/notification_service/internal/chat-message

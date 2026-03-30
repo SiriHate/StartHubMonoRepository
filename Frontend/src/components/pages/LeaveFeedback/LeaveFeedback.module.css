@@ -1,0 +1,325 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+.body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-image: linear-gradient(to top, #2e1753, #1f1746, #131537, #0d1028, #050819);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+
+
+.page {
+    display: flex;
+    justify-content: center;
+    padding: 30px 20px 60px;
+}
+
+.container {
+    width: 100%;
+    max-width: 720px;
+    min-width: 0;
+    box-sizing: border-box;
+    background: rgba(27, 23, 57, 0.92);
+    color: #f0f0f0;
+    padding: 32px 36px;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    backdrop-filter: blur(10px);
+}
+
+
+
+.topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.backBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(46, 42, 80, 0.5);
+    color: #f0f0f0;
+    border: 1px solid rgba(62, 58, 109, 0.5);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.backBtn:hover {
+    background: rgba(46, 42, 80, 0.8);
+    transform: translateX(-2px);
+}
+
+.progress {
+    font-size: 0.85rem;
+    color: #a0a0c0;
+    padding: 6px 14px;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 8px;
+}
+
+
+
+.titleBlock {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.titleBlock i {
+    font-size: 1.8rem;
+    color: rgba(99, 102, 241, 0.5);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.titleBlock h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f0f0f0;
+}
+
+.submitError {
+    margin: 0 0 20px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #fecaca;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+
+
+.questionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+    min-width: 0;
+}
+
+.questionCard {
+    background: rgba(38, 36, 59, 0.5);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 14px;
+    padding: 20px;
+    min-width: 0;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.questionCard:hover {
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.questionCard.answered {
+    border-color: rgba(34, 197, 94, 0.25);
+}
+
+.questionHeader {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.questionNum {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.questionCard.answered .questionNum {
+    background: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+}
+
+.questionText {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #e0e0f0;
+    line-height: 1.5;
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.answerInput {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 10px;
+    background: rgba(38, 36, 59, 0.6);
+    color: #f0f0f0;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+}
+
+.answerInput:focus {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.45);
+}
+
+.answerInput::placeholder {
+    color: #6b6b90;
+}
+
+
+
+.ratingSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding: 24px;
+    background: rgba(38, 36, 59, 0.35);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 14px;
+}
+
+.ratingLabel {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e0e0f0;
+}
+
+.stars {
+    display: flex;
+    gap: 6px;
+}
+
+.star {
+    font-size: 2.2rem;
+    color: rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+    line-height: 1;
+}
+
+.star:hover {
+    transform: scale(1.15);
+}
+
+.starActive {
+    color: #fbbf24;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+}
+
+.ratingValue {
+    font-size: 0.85rem;
+    color: #a0a0c0;
+}
+
+
+
+.submitBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
+}
+
+.submitBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 16px rgba(34, 197, 94, 0.4);
+}
+
+
+
+.loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 60px 20px;
+    color: #a0a0c0;
+    font-size: 0.95rem;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(99, 102, 241, 0.15);
+    border-top-color: rgba(99, 102, 241, 0.6);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 50px 20px;
+    text-align: center;
+    color: #fca5a5;
+}
+
+.errorState i {
+    font-size: 2rem;
+    opacity: 0.7;
+}
+
+.errorState p {
+    margin: 0;
+    font-size: 1rem;
+    color: #e0e0f0;
+}
+
+
+
+@media screen and (max-width: 600px) {
+    .container {
+        padding: 24px 20px;
+    }
+
+    .titleBlock h1 {
+        font-size: 1.25rem;
+    }
+
+    .star {
+        font-size: 1.8rem;
+    }
+}

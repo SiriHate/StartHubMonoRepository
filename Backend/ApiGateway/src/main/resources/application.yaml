@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ApiGateway
+
+server:
+  address: localhost
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+
+jwt:
+  secret: y4H2V9kJmZ0Xc7LwP3e8bQ2R6N1sT5dA0FhUoC9KxMA
+
+custom-gateway-properties:
+  filter-exclude-paths:
+    - /api/v1/user_service/auth/refresh
+    - /api/v1/user_service/members
+    - /api/v1/user_service/sessions
+    - /api/v1/user_service/sessions/yandex
+    - /api/v1/user_service/members/password-recoveries
+    - /api/v1/user_service/members/password-recoveries/*
+    - /api/v1/user_service/confirmations/*

@@ -1,0 +1,225 @@
+.body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0a0a1a 0%, #0d1028 40%, #131537 100%);
+    background-attachment: fixed;
+}
+
+.page {
+    min-height: 100vh;
+    padding: 90px 24px 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+.topBar {
+    display: flex;
+    align-items: center;
+}
+
+.backBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.84rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.backBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+
+.card {
+    background: rgba(30, 30, 65, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 28px 24px;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.cardHeader i {
+    font-size: 1.15rem;
+    color: #4a9eed;
+}
+
+.cardHeader h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.cardSubtitle {
+    margin: 0 0 24px;
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+.questionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.questionCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.2s;
+}
+
+.questionCard:focus-within {
+    border-color: rgba(74, 158, 237, 0.2);
+}
+
+.questionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.questionBadge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #a3d4ff;
+}
+
+.questionBadge i {
+    font-size: 0.78rem;
+    color: rgba(74, 158, 237, 0.5);
+}
+
+.removeBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(220, 60, 60, 0.08);
+    border: 1px solid rgba(220, 60, 60, 0.15);
+    border-radius: 6px;
+    color: #fca5a5;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.removeBtn:hover {
+    background: rgba(220, 60, 60, 0.2);
+    color: #fff;
+}
+
+.questionInput {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.88rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.questionInput::placeholder {
+    color: rgba(255, 255, 255, 0.18);
+}
+
+.questionInput:focus {
+    outline: none;
+    border-color: rgba(74, 158, 237, 0.35);
+}
+
+
+.addBtn {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.86rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.addBtn:hover {
+    background: rgba(74, 158, 237, 0.08);
+    border-color: rgba(74, 158, 237, 0.2);
+    color: #a3d4ff;
+}
+
+.submitBtn {
+    padding: 13px;
+    background: rgba(74, 158, 237, 0.15);
+    border: 1px solid rgba(74, 158, 237, 0.3);
+    border-radius: 10px;
+    color: #a3d4ff;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.submitBtn:hover {
+    background: rgba(74, 158, 237, 0.25);
+    color: #fff;
+}
+
+@media (max-width: 560px) {
+    .page { padding: 80px 12px 32px; }
+    .card { padding: 20px 16px; }
+    .questionCard { padding: 12px; }
+}

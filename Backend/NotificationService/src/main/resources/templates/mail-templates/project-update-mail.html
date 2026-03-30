@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Обновление проекта</title>
+</head>
+<body style="margin: 0; padding: 20px; background: linear-gradient(135deg, #a1c4fd, #c2e9fb);">
+<div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <img src="cid:logo" alt="StartHub Logo" style="max-width: 220px;">
+    </div>
+
+    <h2 style="color: #2d2d2d;">Здравствуйте, <span th:text="${userFullName}"></span>!</h2>
+
+    <p style="font-size: 16px; color: #444; line-height: 1.6;">
+        В проекте <strong th:text="${projectName}"></strong> были внесены изменения <span th:text="${updateDate}"></span>.
+    </p>
+
+    <div style="text-align: center; margin: 30px 0;">
+        <a th:href="${projectLink}" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #667eea, #764ba2); color: #ffffff; font-weight: bold; text-decoration: none; border-radius: 6px;">
+            Перейти к проекту
+        </a>
+    </div>
+
+    <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
+
+    <p style="font-size: 14px; color: #888888; text-align: center;">
+        С уважением,<br>Команда <strong>StartHub</strong>
+    </p>
+</div>
+</body>
+</html>

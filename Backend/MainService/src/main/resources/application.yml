@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: MainService
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/main_service
+    username: user
+    password: pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: main-service-group
+      properties:
+        spring:
+          json:
+            use:
+              type:
+                headers: false
+            trusted:
+              packages: "*"
+
+server:
+  address: localhost
+  port: 8083
+
+logging:
+  level:
+    root: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+user:
+  deletion:
+    topic:
+      s2m:
+        name: deleted_users_user_to_main
+      m2s:
+        name: deleted_users_main_to_user
+
+project:
+  update:
+    notification:
+      topic: project_update_notification_m2s
+
+minio:
+  endpoint: http://localhost:9000
+  region: us-east-1
+  accessKey: minio
+  secretKey: minio12345
+  articles_logo_bucket: articles
+  news_logo_bucket: news
+  projects_logo_bucket: projects

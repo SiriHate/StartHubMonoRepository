@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: UserService
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user_service
+    username: user
+    password: pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  aop:
+    proxy-target-class: false
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+            use:
+              type:
+                headers: false
+
+server:
+  address: localhost
+  port: 8081
+
+logging:
+  level:
+    root: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+confirmation:
+  topic:
+    name: confirmation_topic
+
+notification:
+  topic:
+    name: notification_topic
+
+bootstrap:
+  address: localhost:9092
+
+user:
+  deletion:
+    topic:
+      s2m:
+        name: deleted_users_user_to_main
+      m2s:
+        name: deleted_users_main_to_user
+
+project:
+  update:
+    notification:
+      topic:
+        consumer: project_update_notification_m2s
+        producer: project_update_notification_s2n
+
+minio:
+  endpoint: http://localhost:9000
+  region: us-east-1
+  accessKey: minio
+  secretKey: minio12345
+  avatars_bucket: avatars
+
+jwt:
+  secret: y4H2V9kJmZ0Xc7LwP3e8bQ2R6N1sT5dA0FhUoC9KxMA
+  access-token-expiration: 604800000
+  refresh-token-expiration: 604800000

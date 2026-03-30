@@ -1,0 +1,662 @@
+openapi: 3.1.0
+info:
+  title: User Service API
+  version: 1.0.0
+  description: OpenAPI спецификация для основного сервиса
+
+paths:
+
+  /api/v1/chat_service/chats:
+    post:
+      tags:
+        - Chat
+      summary: Создание чата
+      description: Создаёт новый чат (групповой или приватный).
+      operationId: createChat
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '201':
+          description: Чат успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatFullResponse'
+
+  /api/v1/chat_service/chats/{id}:
+    get:
+      tags:
+        - Chat
+      summary: Получение чата по ID
+      description: Получение чата по ID
+      operationId: getChatById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор чата
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Чат успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatSummaryResponse'
+    delete:
+      tags:
+        - Chat
+      summary: Удаление чата
+      description: Удаляет чат по ID.
+      operationId: deleteChat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор чата для удаления
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Чат успешно удалён
+
+  /api/v1/chat_service/chats/messages/{id}:
+    delete:
+      tags:
+        - Message
+      summary: Удаление сообщение из чата
+      description: Удаляет сообщение из чата по ID.
+      operationId: deleteChatMessage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор сообщения для удаления
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Сообщение успешно удалёно
+
+  /api/v1/chat_service/chats/me:
+    get:
+      tags:
+        - Chat
+      summary: Получение всех чатов текущего пользователя
+      description: Возвращает список всех чатов, в которых участвует текущий пользователь.
+      operationId: getMyChats
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы
+          required: true
+          schema:
+            type: integer
+            example: 0
+        - name: size
+          in: query
+          description: Размер страницы
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - $ref: '#/components/parameters/XUserNameHeader'
+      responses:
+        '200':
+          description: Список чатов успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatPageResponse'
+
+  /api/v1/chat_service/chats/notifications/muted:
+    get:
+      tags:
+        - Chat
+      summary: Получение заглушенных чатов
+      description: Возвращает список chatId, для которых пользователь заглушил уведомления.
+      operationId: getMutedChats
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      responses:
+        '200':
+          description: Список заглушенных чатов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+
+  /api/v1/chat_service/chats/{id}/notifications/muted:
+    put:
+      tags:
+        - Chat
+      summary: Заглушить уведомления чата
+      description: Включает mute для уведомлений выбранного чата у текущего пользователя.
+      operationId: muteChatNotifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/XUserNameHeader'
+      responses:
+        '204':
+          description: Уведомления чата заглушены
+    delete:
+      tags:
+        - Chat
+      summary: Включить уведомления чата
+      description: Отключает mute для уведомлений выбранного чата у текущего пользователя.
+      operationId: unmuteChatNotifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/XUserNameHeader'
+      responses:
+        '204':
+          description: Уведомления чата включены
+
+  /api/v1/chat_service/chats/{id}/members:
+    post:
+      tags:
+        - ChatMember
+      summary: Добавление участника в чат
+      description: Добавление участника в чат
+      operationId: createChatMember
+      parameters:
+        - name: id
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatMemberRequest'
+      responses:
+        '201':
+          description: Участник успешно добавлен в чат
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMemberResponse'
+    get:
+      tags:
+        - ChatMember
+      summary: Получение участников чата
+      description: Получение участников чата
+      operationId: getChatMembers
+      parameters:
+        - name: id
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 0
+        - name: page
+          in: query
+          description: Номер страницы
+          required: true
+          schema:
+            type: integer
+            example: 0
+        - name: size
+          in: query
+          description: Размер страницы
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Список участников чата успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMemberPageResponse'
+
+  /api/v1/chat_service/chats/members/{id}:
+    delete:
+      tags:
+        - ChatMember
+      summary: Удаление пользователя из группового чата
+      description: Удаление пользователя из группового чата
+      operationId: deleteChatMemberById
+      parameters:
+        - name: id
+          in: path
+          description: Уникальный индентификатор участника чата
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 0
+      responses:
+        '204':
+          description: Участник успешно удален из группового чата
+
+  /api/v1/chat_service/chats/members/{id}/role:
+        patch:
+          tags:
+            - ChatMember
+          summary: Изменение роли пользователя
+          description: Изменение роли пользователя
+          operationId: changeChatMemberRole
+          parameters:
+            - name: id
+              in: path
+              description: Уникальный индентификатор участника чата
+              required: true
+              schema:
+                type: integer
+                format: int64
+                example: 0
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChangeMemberChatRole'
+          responses:
+            '200':
+              description: Список чатов успешно получен
+
+  /api/v1/chat_service/chats/{chatId}/images:
+    post:
+      tags:
+        - ChatImage
+      summary: Загрузка изображения для чата
+      operationId: uploadChatImage
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/XUserNameHeader'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Изображение загружено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUploadResponse'
+
+  /api/v1/chat_service/users:
+    post:
+      tags:
+        - User
+      summary: Создание пользователя
+      description: Создаёт нового пользователя.
+      operationId: createUser
+      parameters:
+        - name: username
+          in: query
+          required: true
+          description: Уникальное имя пользователя
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Пользователь успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+  /api/v1/chat_service/users/{userId}:
+    delete:
+      tags:
+        - User
+      summary: Удаление пользователя
+      description: Удаляет пользователя по идентификатору.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Пользователь успешно удалён
+
+  /api/v1/chat_service/users/{username}:
+    get:
+      tags:
+        - User
+      summary: Получение пользователя по username
+      description: Возвращает пользователя по его username.
+      operationId: getUserByUsername
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: Username пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+components:
+  schemas:
+
+    UserResponse:
+      type: object
+      description: Пользователь чата
+      required:
+        - id
+        - username
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор пользователя
+          example: 1
+        username:
+          type: string
+          description: Уникальное имя пользователя
+          example: johndoe
+
+    SubscribeRequest:
+      type: object
+      description: Запрос на подписку на чат
+      required:
+        - chatId
+        - page
+        - size
+      properties:
+        chatId:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор чата
+        page:
+          type: integer
+          description: Номер страницы
+        size:
+          type: integer
+          description: Размер страницы
+
+    ChatRequest:
+      type: object
+      description: Запрос на создание чата (группового или приватного)
+      required:
+        - type
+        - participantUsernames
+      properties:
+        name:
+          type: string
+          description: Название чата (используется для группового чата)
+        type:
+          $ref: '#/components/schemas/ChatType'
+          description: Тип чата
+        members:
+          type: array
+          description: Список имен участников чата
+          items:
+            $ref: '#/components/schemas/ChatMemberRequest'
+
+    ChatMemberPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChatMemberResponse'
+
+    ChatMemberResponse:
+      type: object
+      description: Участник чата
+      required:
+        - id
+        - username
+        - role
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор участника чата
+        username:
+          type: string
+          description: Имя пользователя
+        role:
+          $ref: '#/components/schemas/MemberChatRole'
+
+    MessageResponse:
+      type: object
+      description: Сообщение в чате
+      required:
+        - id
+        - sender
+        - sendAt
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор сообщения
+        sender:
+          type: string
+          description: Имя пользователя, который отправил сообщение
+        content:
+          type: string
+          description: Содержимое сообщения
+        imageUrl:
+          type: string
+          description: Presigned URL изображения
+        sendAt:
+          type: string
+          description: Дата и время отправки сообщения
+
+    MessagePageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/MessageResponse'
+
+    ChatPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChatSummaryResponse'
+
+    ChatFullResponse:
+      type: object
+      description: Чат
+      required:
+        - id
+        - type
+        - participantUsernames
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор чата
+        name:
+          type: string
+          description: Название чата (используется для группового чата)
+        type:
+          $ref: '#/components/schemas/ChatType'
+          description: Тип чата
+        participantUsernames:
+          type: array
+          description: Список username участников чата
+          items:
+            type: string
+
+    ChatSummaryResponse:
+      type: object
+      description: Чат
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор чата
+        name:
+          type: string
+          description: Название чата (если он групповой)
+        type:
+          $ref: '#/components/schemas/ChatType'
+          description: Тип чата
+        lastMessage:
+          type: string
+          description: Превью последнего сообщения
+        lastMessageAt:
+          type: string
+          format: date-time
+          description: Дата и время последнего сообщения
+
+    MessageRequest:
+      type: object
+      description: Запрос на отправку сообщения
+      required:
+        - chatId
+      properties:
+        content:
+          type: string
+          description: Текст сообщения
+        imageKey:
+          type: string
+          description: Ключ загруженного изображения
+        chatId:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор чата
+
+    ImageUploadResponse:
+      type: object
+      required:
+        - imageKey
+      properties:
+        imageKey:
+          type: string
+          description: Ключ загруженного изображения в S3
+
+    ChatMemberRequest:
+      type: object
+      description: Запрос на создание участника чата
+      required:
+        - username
+        - role
+      properties:
+        username:
+          type: string
+          description: Имя пользователя
+        role:
+          $ref: '#/components/schemas/MemberChatRole'
+          description: Роль участника в чате
+
+    ChangeMemberChatRole:
+      type: object
+      description: Запрос на создание участника чата
+      required:
+        - role
+      properties:
+        role:
+          $ref: '#/components/schemas/MemberChatRole'
+          description: Роль участника в чате
+
+    ChatType:
+      type: string
+      enum:
+        - PRIVATE
+        - GROUP
+
+    MemberChatRole:
+      type: string
+      enum:
+        - OWNER
+        - MODERATOR
+        - MEMBER
+
+    Page:
+      type: object
+      required:
+        - content
+        - number
+        - size
+        - totalElements
+        - totalPages
+      properties:
+        content:
+          type: array
+          description: Массив элементов текущей страницы
+          items: { }
+        number:
+          type: integer
+          example: 1
+        size:
+          type: integer
+          example: 1
+        totalElements:
+          type: integer
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          example: 1
+
+  parameters:
+    XUserNameHeader:
+      name: X-User-Name
+      in: header
+      description: "Имя пользователя, проставляется Gateway"
+      required: true
+      schema:
+        type: string

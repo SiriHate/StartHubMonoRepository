@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: NotificationService
+
+  mail:
+    host: smtp.mail.ru
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted:
+              packages: "*"
+
+  aop:
+    proxy-target-class: false
+
+server:
+  address: localhost
+  port: 8082
+
+confirmation:
+  topic:
+    name: confirmation_topic
+
+notification:
+  topic:
+    name: notification_topic
+
+kafka:
+  groupId:
+    name: consumers
+
+bootstrap:
+  address: localhost:9092
+
+group:
+  id: notificationService
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

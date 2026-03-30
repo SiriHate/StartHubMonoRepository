@@ -1,0 +1,1773 @@
+openapi: 3.1.0
+info:
+  title: User Service API
+  version: 1.0.0
+  description: OpenAPI спецификация для пользовательского сервиса
+
+paths:
+  /api/v1/user_service/admins:
+    post:
+      tags:
+        - Admin
+      summary: Создание нового администратора
+      description: Создание нового администратора
+      operationId: createAdmin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminRequest'
+      responses:
+        '201':
+          description: Администратор успешно создан!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminFullResponse'
+    get:
+      tags:
+        - Admin
+      summary: Получение страницы администраторов
+      description: Возвращает страницу администраторов с поддержкой пагинации
+      operationId: getAdmins
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Страница администраторов успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPageResponse'
+
+  /api/v1/user_service/admins/{id}:
+    get:
+      tags:
+        - Admin
+      summary: Получение администратора
+      description: Получение администратора по его ID
+      operationId: getAdmin
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: Администратор найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminFullResponse'
+        '404':
+          description: Администратор не найден
+          content:
+            text/plain:
+              schema:
+                type: string
+    patch:
+      tags:
+        - Admin
+      summary: Обновление администратора
+      description: Обновление данных администратора по его ID
+      operationId: updateAdmin
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminRequest'
+      responses:
+        '200':
+          description: Администратор обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminFullResponse'
+        '404':
+          description: Администратор не найден
+          content:
+            text/plain:
+              schema:
+                type: string
+    delete:
+      tags:
+        - Admin
+      summary: Удаление администратора
+      description: Удаление администратора по его ID
+      operationId: deleteAdmin
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '204':
+          description: Администратор успешно удален
+        '404':
+          description: Администратор не найден
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/v1/user_service/moderators:
+    post:
+      tags:
+        - Moderator
+      summary: Создание нового модератора
+      description: Создание нового модератора
+      operationId: createModerator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModeratorRequest'
+      responses:
+        '201':
+          description: Модератор успешно создан!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeratorFullResponse'
+    get:
+      tags:
+        - Moderator
+      summary: Получение страницы модераторов
+      description: Возвращает страницу модераторов с поддержкой пагинации
+      operationId: getModerators
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: size
+          in: query
+          schema:
+            type: integer
+        - name: usernameQuery
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Страница модераторов успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeratorPageResponse'
+
+  /api/v1/user_service/members:
+    post:
+      summary: Регистрация нового пользователя
+      description: Регистрация нового пользователя
+      operationId: registerMember
+      tags:
+        - Member
+      requestBody:
+        description: Данные для регистрации пользователя
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberRegistrationRequest'
+      responses:
+        '201':
+          description: Успешная регистрация
+        '400':
+          description: Невалидные данные
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    get:
+      tags:
+        - Member
+      summary: Поиск пользователей
+      operationId: getMembers
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: size
+          in: query
+          schema:
+            type: integer
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: profileType
+          in: query
+          schema:
+            $ref: '#/components/schemas/ProfileType'
+        - name: domain
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberPageResponse'
+
+  /api/v1/user_service/members/{id}:
+    get:
+      tags:
+        - Member
+      summary: Получение пользователя по ID
+      description: Возвращает полные данные пользователя по ID.
+      operationId: getMemberById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Пользователь найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberFullResponse'
+    delete:
+      tags:
+        - Member
+      summary: Удаление пользователя по ID
+      description: Удаляет пользователя по ID.
+      operationId: deleteMemberById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Пользователь удалён
+
+  /api/v1/user_service/members/by-username/{username}:
+    get:
+      tags:
+        - Member
+      summary: Получение пользователя по username
+      description: Возвращает полные данные пользователя по username.
+      operationId: getMemberByUsername
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: Уникальное имя пользователя
+          schema:
+            type: string
+            example: "user"
+      responses:
+        '200':
+          description: Пользователь найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberFullResponse'
+    delete:
+      tags:
+        - Member
+      summary: Удаление пользователя по username
+      description: Удаляет пользователя по username.
+      operationId: deleteMemberByUsername
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: Уникальное имя пользователя
+          schema:
+            type: string
+            example: "user"
+      responses:
+        '204':
+          description: Пользователь удалён
+
+  /api/v1/user_service/members/me:
+    get:
+      tags:
+        - Member
+      summary: Получение текущего пользователя
+      description: Возвращает полные данные текущего аутентифицированного пользователя.
+      operationId: getCurrentMember
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      responses:
+        '200':
+          description: Данные текущего пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberFullResponse'
+    patch:
+      tags:
+        - Member
+      summary: Изменяет данные текущего пользователя
+      description: Изменяет данные текущего пользователя.
+      operationId: updateCurrentMember
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberProfileDataRequest'
+      responses:
+        '200':
+          description: Данные успешно изменены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberFullResponse'
+    delete:
+      tags:
+        - Member
+      summary: Удаление текущего пользователя
+      description: Удаляет текущего аутентифицированного пользователя.
+      operationId: deleteCurrentMember
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      responses:
+        '204':
+          description: Пользователь удалён
+
+  /api/v1/user_service/members/me/password:
+    patch:
+      tags:
+        - Member
+      summary: Изменение пароля текущего пользователя
+      description: Позволяет аутентифицированному пользователю изменить пароль.
+      operationId: changeCurrentMemberPassword
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Пароль успешно изменён
+
+  /api/v1/user_service/members/me/avatar:
+    patch:
+      tags:
+        - Member
+      summary: Изменение аватара текущего пользователя
+      description: Загружает новый аватар для текущего пользователя.
+      operationId: changeCurrentMemberAvatar
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Аватар успешно изменён
+
+  /api/v1/user_service/members/me/profile:
+    patch:
+      tags:
+        - Member
+      summary: Обновление профиля текущего пользователя
+      description: Частичное обновление персональных данных текущего пользователя.
+      operationId: updateCurrentMemberProfile
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberProfileDataRequest'
+      responses:
+        '200':
+          description: Профиль успешно обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberFullResponse'
+
+  /api/v1/user_service/members/password-recoveries:
+    post:
+      tags:
+        - Member
+      summary: Запрос на восстановление пароля
+      description: Отправляет запрос на восстановление пароля для пользователя.
+      operationId: memberPasswordRecoveryRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryPasswordRequest'
+      responses:
+        '200':
+          description: Запрос успешно отправлен
+
+  /api/v1/user_service/members/password-recoveries/{token}:
+    patch:
+      tags:
+        - Member
+      summary: Подтверждение восстановления пароля
+      description: Подтверждает и изменяет пароль пользователя по токену.
+      operationId: memberPasswordRecoveryConfirm
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordTokenRequest'
+      responses:
+        '200':
+          description: Пароль успешно изменён
+
+  /api/v1/user_service/moderators/{id}:
+    get:
+      tags:
+        - Moderator
+      summary: Получение модератора
+      description: Получение модератора по его ID
+      operationId: getModerator
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: Модератор найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeratorFullResponse'
+        '404':
+          description: Модератор не найден
+          content:
+            text/plain:
+              schema:
+                type: string
+    patch:
+      tags:
+        - Moderator
+      summary: Обновление модератора
+      description: Обновление данных модератора по его ID
+      operationId: updateModerator
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModeratorRequest'
+      responses:
+        '200':
+          description: Модератор обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeratorFullResponse'
+        '404':
+          description: Модератор не найден
+          content:
+            text/plain:
+              schema:
+                type: string
+    delete:
+      tags:
+        - Moderator
+      summary: Удаление модератора
+      description: Удаление модератора по его ID
+      operationId: deleteModerator
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '204':
+          description: Модератор успешно удален
+        '404':
+          description: Модератор не найден
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/v1/user_service/member-specializations:
+    get:
+      tags:
+        - MemberProfile
+      summary: Получение всех специализаций
+      description: Возвращает справочник специализаций для профиля соискателя.
+      operationId: getSpecializations
+      responses:
+        '200':
+          description: Список специализаций
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobSeekerSpecializationResponse'
+              example:
+                - id: 1
+                  name: Backend Developer
+                - id: 2
+                  name: Product Manager
+        '404':
+          description: Специализация не найдена
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/v1/user_service/members/{memberId}/profiles/founder:
+    post:
+      tags:
+        - MemberProfile
+      summary: Создание профиля фаундера
+      description: Создает профиль фаундера для указанного участника.
+      operationId: createFounderProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FounderProfileRequest'
+            example:
+              memberId: 77
+              about: Building B2B SaaS startup
+              domainIds: [ 1, 3 ]
+      responses:
+        '200':
+          description: Профиль фаундера создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FounderProfileResponse'
+              example:
+                about: Serial entrepreneur in AI and robotics
+                domains: [ "AI", "Robotics" ]
+    get:
+      tags:
+        - MemberProfile
+      summary: Получение профиля фаундера
+      description: Возвращает профиль фаундера указанного участника.
+      operationId: getFounderProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '200':
+          description: Профиль фаундера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FounderProfileResponse'
+              example:
+                about: Serial entrepreneur in AI and robotics
+                domains: [ "AI", "Robotics" ]
+    patch:
+      tags:
+        - MemberProfile
+      summary: Обновление профиля фаундера
+      description: Обновляет профиль фаундера указанного участника.
+      operationId: updateFounderProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FounderProfileRequest'
+            example:
+              memberId: 77
+              about: Building B2B SaaS startup
+              domainIds: [ 1, 3 ]
+      responses:
+        '200':
+          description: Профиль фаундера обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FounderProfileResponse'
+              example:
+                about: Serial entrepreneur in AI and robotics
+                domains: [ "AI", "Robotics" ]
+    delete:
+      tags:
+        - MemberProfile
+      summary: Удаление профиля фаундера
+      description: Удаляет профиль фаундера указанного участника.
+      operationId: deleteFounderProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '204':
+          description: Профиль фаундера удален
+
+  /api/v1/user_service/members/{memberId}/profiles/investor:
+    post:
+      tags:
+        - MemberProfile
+      summary: Создание профиля инвестора
+      description: Создает профиль инвестора для указанного участника.
+      operationId: createInvestorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvestorProfileRequest'
+            example:
+              memberId: 42
+              about: Investing in early-stage AI startups
+              domainIds: [ 1, 2 ]
+      responses:
+        '200':
+          description: Профиль инвестора создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvestorProfileResponse'
+              example:
+                about: Angel investor in B2B SaaS and AI startups
+                domains: [ "AI", "Fintech", "SaaS" ]
+    get:
+      tags:
+        - MemberProfile
+      summary: Получение профиля инвестора
+      description: Возвращает профиль инвестора указанного участника.
+      operationId: getInvestorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '200':
+          description: Профиль инвестора
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvestorProfileResponse'
+              example:
+                about: Angel investor in B2B SaaS and AI startups
+                domains: [ "AI", "Fintech", "SaaS" ]
+    patch:
+      tags:
+        - MemberProfile
+      summary: Обновление профиля инвестора
+      description: Обновляет профиль инвестора указанного участника.
+      operationId: updateInvestorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvestorProfileRequest'
+            example:
+              memberId: 42
+              about: Investing in early-stage AI startups
+              domainIds: [ 1, 2 ]
+      responses:
+        '200':
+          description: Профиль инвестора обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvestorProfileResponse'
+              example:
+                about: Angel investor in B2B SaaS and AI startups
+                domains: [ "AI", "Fintech", "SaaS" ]
+    delete:
+      tags:
+        - MemberProfile
+      summary: Удаление профиля инвестора
+      description: Удаляет профиль инвестора указанного участника.
+      operationId: deleteInvestorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '204':
+          description: Профиль инвестора удален
+
+  /api/v1/user_service/members/{memberId}/profiles/mentor:
+    post:
+      tags:
+        - MemberProfile
+      summary: Создание профиля ментора
+      description: Создает профиль ментора для указанного участника.
+      operationId: createMentorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MentorProfileRequest'
+            example:
+              memberId: 55
+              about: Helping fintech startups scale
+              domainIds: [ 2, 4 ]
+      responses:
+        '200':
+          description: Профиль ментора создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfileResponse'
+              example:
+                about: Product mentor for SaaS founders
+                domains: [ "Fintech", "EdTech" ]
+    get:
+      tags:
+        - MemberProfile
+      summary: Получение профиля ментора
+      description: Возвращает профиль ментора указанного участника.
+      operationId: getMentorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '200':
+          description: Профиль ментора
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfileResponse'
+              example:
+                about: Product mentor for SaaS founders
+                domains: [ "Fintech", "EdTech" ]
+    patch:
+      tags:
+        - MemberProfile
+      summary: Обновление профиля ментора
+      description: Обновляет профиль ментора указанного участника.
+      operationId: updateMentorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MentorProfileRequest'
+            example:
+              memberId: 55
+              about: Helping fintech startups scale
+              domainIds: [ 2, 4 ]
+      responses:
+        '200':
+          description: Профиль ментора обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfileResponse'
+              example:
+                about: Product mentor for SaaS founders
+                domains: [ "Fintech", "EdTech" ]
+    delete:
+      tags:
+        - MemberProfile
+      summary: Удаление профиля ментора
+      description: Удаляет профиль ментора указанного участника.
+      operationId: deleteMentorProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '204':
+          description: Профиль ментора удален
+
+  /api/v1/user_service/members/{memberId}/profiles/job-seeker:
+    post:
+      tags:
+        - MemberProfile
+      summary: Создание профиля соискателя
+      description: Создает профиль соискателя для указанного участника.
+      operationId: createJobSeekerProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobSeekerProfileRequest'
+            example:
+              memberId: 91
+              about: Looking for backend role in AI startup
+              specializationId: 2
+      responses:
+        '200':
+          description: Профиль соискателя создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobSeekerProfileResponse'
+              example:
+                about: Backend Java developer with 5 years experience
+                specialization: Backend Developer
+    get:
+      tags:
+        - MemberProfile
+      summary: Получение профиля соискателя
+      description: Возвращает профиль соискателя указанного участника.
+      operationId: getJobSeekerProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '200':
+          description: Профиль соискателя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobSeekerProfileResponse'
+              example:
+                about: Backend Java developer with 5 years experience
+                specialization: Backend Developer
+    patch:
+      tags:
+        - MemberProfile
+      summary: Обновление профиля соискателя
+      description: Обновляет профиль соискателя указанного участника.
+      operationId: updateJobSeekerProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobSeekerProfileRequest'
+            example:
+              memberId: 91
+              about: Looking for backend role in AI startup
+              specializationId: 2
+      responses:
+        '200':
+          description: Профиль соискателя обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobSeekerProfileResponse'
+              example:
+                about: Backend Java developer with 5 years experience
+                specialization: Backend Developer
+    delete:
+      tags:
+        - MemberProfile
+      summary: Удаление профиля соискателя
+      description: Удаляет профиль соискателя указанного участника.
+      operationId: deleteJobSeekerProfile
+      parameters:
+        - $ref: '#/components/parameters/MemberIdPath'
+      responses:
+        '204':
+          description: Профиль соискателя удален
+
+  /api/v1/user_service/domains:
+    get:
+      tags:
+        - MemberProfile
+      summary: Получение всех доменов
+      description: Возвращает справочник индустрий для профилей участников.
+      operationId: getAllDomains
+      responses:
+        '200':
+          description: Список доменов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DomainResponse'
+              example:
+                - id: 1
+                  name: Fintech
+                - id: 2
+                  name: AI
+
+  /api/v1/user_service/confirmations/{token}:
+    get:
+      tags:
+        - Confirmation
+      summary: Проверка токена подтверждения
+      description: Проверяет существование токена подтверждения
+      operationId: checkConfirmationToken
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+            example: "abc123xyz"
+      responses:
+        '200':
+          description: Токен подтверждения найден
+        '404':
+          description: Токен подтверждения не найден
+    patch:
+      tags:
+        - Confirmation
+      summary: Подтверждение регистрации пользователя
+      description: >
+        Проверяет токен подтверждения регистрации и активирует пользователя.  
+        Если токен недействителен или истёк, вернёт ошибку.
+      operationId: confirmRegistration
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Регистрация успешно подтверждена
+        '400':
+          description: Токен недействителен или отсутствует
+        '404':
+          description: Токен не найден
+
+  /api/v1/user_service/sessions:
+    post:
+      tags:
+        - User
+      summary: Аутентификация пользователя по логину и паролю
+      operationId: simpleLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleLoginRequest'
+      responses:
+        '200':
+          description: Успешная аутентификация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulLoginResponse'
+        '400':
+          description: Некорректные данные запроса
+        '401':
+          description: Неверные учетные данные
+
+  /api/v1/user_service/sessions/yandex:
+    post:
+      tags:
+        - Member
+      summary: Аутентификация обычного пользователя через Яндекс OAuth
+      operationId: yandexLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YandexLoginRequest'
+      responses:
+        '200':
+          description: Успешная аутентификация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulLoginResponse'
+        '400':
+          description: Некорректный OAuth токен
+        '401':
+          description: Ошибка аутентификации
+
+  /api/v1/user_service/users/me:
+    get:
+      tags:
+        - User
+      summary: Получение информации о текущем пользователе
+      operationId: getCurrentUser
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
+      responses:
+        '200':
+          description: Информация о текущем пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUserInfoResponse'
+        '401':
+          description: Пользователь не аутентифицирован
+
+  /api/v1/user_service/auth/refresh:
+    post:
+      tags:
+        - Auth
+      summary: Обновление access токена по refresh токену
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Токен успешно обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse'
+        '401':
+          description: Refresh токен недействителен или истёк
+
+components:
+  schemas:
+    MemberFullResponse:
+      type: object
+      description: Полная информация о пользователе
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор пользователя
+        username:
+          type: string
+          description: Уникальное имя пользователя
+        avatarUrl:
+          type: string
+          description: URL аватара пользователя
+        name:
+          type: string
+          description: Отображаемое имя пользователя
+        specialization:
+          type: string
+          description: Специализация пользователя
+        about:
+          type: string
+          description: Описание профиля пользователя
+        email:
+          type: string
+          format: email
+          description: Электронная почта пользователя
+        phone:
+          type: string
+          description: Номер телефона пользователя
+        birthday:
+          type: string
+          format: date
+          description: Дата рождения пользователя
+        country:
+          type: string
+          description: Страна пользователя
+        city:
+          type: string
+          description: Город пользователя
+        jobSeekerProfile:
+          $ref: '#/components/schemas/JobSeekerProfileResponse'
+        investorProfile:
+          $ref: '#/components/schemas/InvestorProfileResponse'
+        mentorProfile:
+          $ref: '#/components/schemas/MentorProfileResponse'
+        founderProfile:
+          $ref: '#/components/schemas/FounderProfileResponse'
+
+    AdminRequest:
+      type: object
+      required:
+        - username
+        - password
+        - name
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: 12345
+        name:
+          type: string
+          example: Alex
+
+    AdminSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: int
+          example: 1
+        username:
+          type: string
+          example: admin
+        name:
+          type: string
+          example: Alex
+
+    AdminPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/AdminSummaryResponse'
+
+    ModeratorPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/ModeratorSummaryResponse'
+
+    MemberPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/MemberSummaryResponse'
+
+    AdminFullResponse:
+      type: object
+      properties:
+        id:
+          type: int
+          example: 1
+        username:
+          type: string
+          example: admin
+        name:
+          type: string
+          example: Alex
+
+    ModeratorRequest:
+      type: object
+      required:
+        - username
+        - password
+        - name
+        - employeeId
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: 12345
+        name:
+          type: string
+          example: Alex
+        employeeId:
+          type: int
+          format: int64
+          example: 1
+
+    ModeratorSummaryResponse:
+      type: object
+      required:
+        - id
+        - username
+        - password
+        - name
+        - employeeId
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: 12345
+        name:
+          type: string
+          example: Alex
+        employeeId:
+          type: int
+          format: int64
+          example: 1
+
+    ModeratorFullResponse:
+      type: object
+      required:
+        - id
+        - username
+        - password
+        - name
+        - employeeId
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: 12345
+        name:
+          type: string
+          example: Alex
+        employeeId:
+          type: int
+          format: int64
+          example: 1
+
+    JobSeekerSpecializationRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Developer
+
+    MemberProfileDataRequest:
+      type: object
+      description: Запрос на изменение персональных данных пользователя
+      properties:
+        name:
+          type: string
+          description: Имя пользователя
+          example: "John Doe"
+        phone:
+          type: string
+          description: Телефон пользователя
+          example: "+37112345678"
+        email:
+          type: string
+          format: email
+          description: Электронная почта пользователя
+          example: "user@example.com"
+        birthday:
+          type: string
+          format: date
+          description: Дата рождения пользователя
+          example: "1990-01-01"
+        country:
+          type: string
+          description: Описание пользователя
+          example: "United States"
+        city:
+          type: string
+          description: Описание пользователя
+          example: "New York"
+        about:
+          type: string
+          description: Описание пользователя
+          example: "I am a backend developer"
+        specializationId:
+          type: integer
+          format: int64
+          description: ID специализации пользователя
+      required:
+        - name
+        - phone
+        - email
+        - birthday
+
+    JobSeekerSpecializationResponse:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Developer
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: "user"
+          description: Имя пользователя
+        password:
+          type: string
+          example: "pass"
+          description: Пароль пользователя
+
+    RecoveryPasswordRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          example: "12345@gmail.com"
+          description: Email пользователя
+
+    ChangePasswordRequest:
+      type: object
+      required:
+        - currentPassword
+        - newPassword
+      properties:
+        currentPassword:
+          type: string
+          example: "12345"
+          description: Текущий пароль пользователя
+        newPassword:
+          type: string
+          example: "54321"
+          description: Новый пароль пользователя
+
+    MemberSummaryResponse:
+      type: object
+      description: Краткая информация о пользователе
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор пользователя
+        username:
+          type: string
+          description: Уникальное имя пользователя
+        name:
+          type: string
+          description: Отображаемое имя пользователя
+        email:
+          type: string
+          format: email
+          description: Электронная почта пользователя
+        avatarUrl:
+          type: string
+          description: URL аватара пользователя
+        specialization:
+          type: string
+          description: Специализация пользователя
+      required:
+        - id
+        - username
+
+    AccessTokenResponse:
+      type: object
+      description: Ответ с access token
+      properties:
+        accessToken:
+          type: string
+          description: Access token
+      required:
+        - accessToken
+
+    SuccessfulLoginResponse:
+      type: object
+      description: Ответ при успешной аутентификации
+      properties:
+        username:
+          type: string
+          description: Имя пользователя
+        accessToken:
+          type: string
+          description: Access токен
+        refreshToken:
+          type: string
+          description: Refresh токен
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required:
+        - username
+        - accessToken
+        - refreshToken
+        - role
+
+    SimpleLoginRequest:
+      type: object
+      description: Запрос аутентификации по логину и паролю
+      properties:
+        username:
+          type: string
+          description: Имя пользователя
+          minLength: 1
+        password:
+          type: string
+          description: Пароль пользователя
+          minLength: 1
+      required:
+        - username
+        - password
+
+    YandexLoginRequest:
+      type: object
+      description: Запрос аутентификации через Яндекс OAuth
+      properties:
+        token:
+          type: string
+          description: OAuth токен Яндекса
+        clientSecret:
+          type: string
+          description: Секрет клиента приложения
+
+    CurrentUserInfoResponse:
+      type: object
+      description: Информация о текущем пользователе
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор пользователя
+        username:
+          type: string
+          description: Имя пользователя
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required:
+        - id
+        - username
+        - role
+
+    MemberRegistrationRequest:
+      type: object
+      description: Запрос на регистрацию нового пользователя
+      properties:
+        name:
+          type: string
+          description: Отображаемое имя пользователя
+        email:
+          type: string
+          format: email
+          description: Электронная почта пользователя
+        phone:
+          type: string
+          description: Номер телефона пользователя
+        birthday:
+          type: string
+          format: date
+          description: Дата рождения пользователя
+        username:
+          type: string
+          description: Уникальное имя пользователя
+        password:
+          type: string
+          description: Пароль пользователя
+      required:
+        - name
+        - email
+        - phone
+        - birthday
+        - username
+        - password
+
+    ChangePasswordTokenRequest:
+      type: object
+      description: Запрос на изменение пароля с использованием токена (например, после восстановления)
+      properties:
+        token:
+          type: string
+          description: Токен для изменения пароля
+          example: "5g3894g5874ev5bw4cer34w"
+        newPassword:
+          type: string
+          description: Новый пароль пользователя
+          example: "newPassword123"
+      required:
+        - token
+        - newPassword
+
+    RefreshTokenRequest:
+      type: object
+      description: Запрос на обновление access токена
+      properties:
+        refreshToken:
+          type: string
+          description: Refresh токен
+      required:
+        - refreshToken
+
+    RegistrationTokenRequest:
+      type: object
+      description: Запрос для подтверждения регистрации пользователя
+      properties:
+        token:
+          type: string
+          description: Токен подтверждения регистрации
+          minLength: 1
+          example: "registrationToken123"
+      required:
+        - token
+
+    DomainResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор домена индустрии
+          example: 3
+        name:
+          type: string
+          description: Название индустрии
+          example: "AI"
+
+    DomainRequest:
+      type: object
+      required: [ name ]
+      properties:
+        name:
+          type: string
+          description: Название индустрии
+          example: "Fintech"
+
+    InvestorProfileResponse:
+      type: object
+      properties:
+        about:
+          type: string
+          example: "Angel investor in B2B SaaS and AI startups"
+        domains:
+          type: array
+          items:
+            type: string
+          example: [ "AI", "Fintech", "SaaS" ]
+
+    InvestorProfileRequest:
+      type: object
+      required: [ memberId ]
+      properties:
+        memberId:
+          type: integer
+          format: int64
+          description: ID участника
+          example: 42
+        about:
+          type: string
+          description: Описание инвестора
+          example: "Investing in early-stage AI startups"
+        domainIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: ID индустрий инвестирования
+          example: [ 1, 2 ]
+
+    MentorProfileResponse:
+      type: object
+      properties:
+        about:
+          type: string
+          example: "Product mentor for SaaS founders"
+        domains:
+          type: array
+          items:
+            type: string
+          example: [ "Fintech", "EdTech" ]
+
+    MentorProfileRequest:
+      type: object
+      required: [ memberId ]
+      properties:
+        memberId:
+          type: integer
+          format: int64
+          description: ID участника
+          example: 55
+        about:
+          type: string
+          description: Описание ментора
+          example: "Helping fintech startups scale"
+        domainIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Индустрии экспертизы
+          example: [ 2, 4 ]
+
+    FounderProfileResponse:
+      type: object
+      properties:
+        about:
+          type: string
+          example: "Serial entrepreneur in AI and robotics"
+        domains:
+          type: array
+          items:
+            type: string
+          example: [ "AI", "Robotics" ]
+
+    FounderProfileRequest:
+      type: object
+      required: [ memberId ]
+      properties:
+        memberId:
+          type: integer
+          format: int64
+          description: ID участника
+          example: 77
+        about:
+          type: string
+          description: Описание фаундера
+          example: "Building B2B SaaS startup"
+        domainIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Индустрии стартапов
+          example: [ 1, 3 ]
+
+    JobSeekerProfileResponse:
+      type: object
+      properties:
+        about:
+          type: string
+          example: "Backend Java developer with 5 years experience"
+        specialization:
+          type: string
+          example: "Backend Developer"
+
+    JobSeekerProfileRequest:
+      type: object
+      required: [ memberId, specializationId ]
+      properties:
+        memberId:
+          type: integer
+          format: int64
+          description: ID участника
+          example: 91
+        about:
+          type: string
+          description: Описание кандидата
+          example: "Looking for backend role in AI startup"
+        specializationId:
+          type: integer
+          format: int64
+          description: ID специализации кандидата
+          example: 2
+
+    Page:
+      type: object
+      required:
+        - content
+        - number
+        - size
+        - totalElements
+        - totalPages
+      properties:
+        content:
+          type: array
+          description: Массив элементов текущей страницы
+          items: { }
+        number:
+          type: integer
+          example: 1
+        size:
+          type: integer
+          example: 1
+        totalElements:
+          type: integer
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          example: 1
+
+    UserRole:
+      type: string
+      enum:
+        - MEMBER
+        - MODERATOR
+        - ADMIN
+
+    ProfileType:
+      type: string
+      enum:
+        - JOB_SEEKER
+        - MENTOR
+        - INVESTOR
+        - FOUNDER
+
+  parameters:
+    XUserNameHeader:
+      name: X-User-Name
+      in: header
+      required: true
+      schema:
+        type: string
+    MemberIdPath:
+      name: memberId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64

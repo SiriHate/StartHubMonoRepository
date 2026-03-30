@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Подтверждение регистрации на StartHub</title>
+</head>
+<body style="margin: 0; padding: 20px; background: linear-gradient(135deg, #a1c4fd, #c2e9fb);">
+<div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <img src="cid:logo" alt="StartHub Logo" style="max-width: 220px;">
+  </div>
+
+  <h2 style="color: #2d2d2d; text-align: center;">Подтверждение регистрации на StartHub</h2>
+
+  <p style="font-size: 16px; color: #444; line-height: 1.6;">
+    Уважаемый(ая) <span th:text="${fullName}"></span>,
+  </p>
+
+  <p style="font-size: 16px; color: #444; line-height: 1.6;">
+    Спасибо за регистрацию на платформе развития стартапов <strong>StartHub</strong>! Для завершения регистрации, пожалуйста, перейдите по ссылке ниже:
+  </p>
+
+  <div style="text-align: center; margin: 30px 0;">
+    <a th:href="${confirmationUrl}" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #667eea, #764ba2); color: #ffffff; font-weight: bold; text-decoration: none; border-radius: 6px;">
+      Подтвердить регистрацию
+    </a>
+  </div>
+
+  <p style="font-size: 16px; color: #444; line-height: 1.6;">
+    Если вы не регистрировались на нашей платформе, просто проигнорируйте это сообщение.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
+
+  <p style="font-size: 14px; color: #888888; text-align: center;">
+    С уважением,<br>Команда <strong>StartHub</strong>
+  </p>
+</div>
+</body>
+</html>
