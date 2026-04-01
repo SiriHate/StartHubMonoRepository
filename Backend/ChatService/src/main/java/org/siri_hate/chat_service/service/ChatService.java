@@ -34,6 +34,7 @@ public class ChatService {
     private final ChatMemberRepository chatMemberRepository;
     private final MessageRepository messageRepository;
     private final UserService userService;
+    private final ChatListNotifier chatListNotifier;
 
     @Autowired
     public ChatService(
@@ -42,7 +43,8 @@ public class ChatService {
             UserService userService,
             ChatMemberMapper chatMemberMapper,
             ChatMemberRepository chatMemberRepository,
-            MessageRepository messageRepository
+            MessageRepository messageRepository,
+            ChatListNotifier chatListNotifier
     ) {
         this.chatRepository = chatRepository;
         this.chatMapper = chatMapper;
@@ -50,6 +52,7 @@ public class ChatService {
         this.chatMemberMapper = chatMemberMapper;
         this.chatMemberRepository = chatMemberRepository;
         this.messageRepository = messageRepository;
+        this.chatListNotifier = chatListNotifier;
     }
 
     public ChatFullResponseDTO createChat(String creatorUsername, ChatRequestDTO request) {
@@ -64,7 +67,9 @@ public class ChatService {
                         otherUsername
                 );
                 if (!existing.isEmpty()) {
-                    return chatMapper.toChatFullResponse(existing.get(0));
+                    Chat existingChat = existing.get(0);
+                    notifyMembersChatListChanged(existingChat);
+                    return chatMapper.toChatFullResponse(existingChat);
                 }
             }
         }
@@ -78,7 +83,14 @@ public class ChatService {
         User owner = userService.getOrCreateUser(creatorUsername);
         chat.getMembers().add(new ChatMember(chat, owner, ChatRole.OWNER));
         chatRepository.save(chat);
+        notifyMembersChatListChanged(chat);
         return chatMapper.toChatFullResponse(chat);
+    }
+
+    private void notifyMembersChatListChanged(Chat chat) {
+        for (ChatMember member : chat.getMembers()) {
+            chatListNotifier.notifyUser(member.getUser().getUsername());
+        }
     }
 
     public ChatPageResponseDTO getMyChats(String username, int page, int size) {

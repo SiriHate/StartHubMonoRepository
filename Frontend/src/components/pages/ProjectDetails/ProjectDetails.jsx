@@ -167,7 +167,7 @@ function ProjectDetails() {
 
     const handleApprove = async () => {
         try {
-            const response = await apiClient(`${config.MAIN_SERVICE}/projects/${projectId}/moderationPassed`, {
+            const response = await apiClient(`${config.MAIN_SERVICE}/projects/${projectId}/moderation-status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(true)

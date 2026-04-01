@@ -155,7 +155,7 @@ const ArticlePage = () => {
 
     const handleApprove = async () => {
         try {
-            const response = await apiClient(`${config.MAIN_SERVICE}/articles/${articleId}/moderationPassed`, {
+            const response = await apiClient(`${config.MAIN_SERVICE}/articles/${articleId}/moderation-status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(true)

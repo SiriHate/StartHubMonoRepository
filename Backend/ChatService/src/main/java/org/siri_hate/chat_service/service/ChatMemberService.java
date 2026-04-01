@@ -20,18 +20,21 @@ public class ChatMemberService {
     private final ChatMemberMapper chatMemberMapper;
     private final UserService userService;
     private final ChatService chatService;
+    private final ChatListNotifier chatListNotifier;
 
     @Autowired
     public ChatMemberService(
             ChatMemberRepository chatMemberRepository,
             ChatMemberMapper chatMemberMapper,
             UserService userService,
-            ChatService chatService
+            ChatService chatService,
+            ChatListNotifier chatListNotifier
     ) {
         this.chatMemberRepository = chatMemberRepository;
         this.chatMemberMapper = chatMemberMapper;
         this.userService = userService;
         this.chatService = chatService;
+        this.chatListNotifier = chatListNotifier;
     }
 
     public ChatMemberResponseDTO createChatMember(Long chatId, ChatMemberRequestDTO request) {
@@ -41,6 +44,7 @@ public class ChatMemberService {
                 chatMemberMapper.toChatRole(request.getRole())
         );
         chatMemberRepository.save(chatMember);
+        chatListNotifier.notifyUser(request.getUsername());
         return chatMemberMapper.toMemberResponseDTO(chatMember);
     }
 

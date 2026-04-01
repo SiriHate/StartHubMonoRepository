@@ -22,4 +22,7 @@ public interface ChatMemberRepository extends JpaRepository<ChatMember, Long> {
 
     @Query("select cm.user.username from ChatMember cm where cm.chat.id = :chatId and cm.user.username <> :senderUsername and cm.mutedNotifications = false")
     List<String> findRecipientUsernames(@Param("chatId") Long chatId, @Param("senderUsername") String senderUsername);
+
+    @Query("select cm.user.username from ChatMember cm where cm.chat.id = :chatId")
+    List<String> findUsernamesByChatId(@Param("chatId") Long chatId);
 }

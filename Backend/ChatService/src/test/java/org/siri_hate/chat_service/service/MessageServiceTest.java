@@ -42,6 +42,8 @@ class MessageServiceTest {
     @Mock
     private ChatMemberRepository chatMemberRepository;
     @Mock
+    private ChatListNotifier chatListNotifier;
+    @Mock
     private ObjectProvider<KafkaTemplate<String, String>> kafkaTemplateProvider;
     @Mock
     private ObjectProvider<com.fasterxml.jackson.databind.ObjectMapper> objectMapperProvider;

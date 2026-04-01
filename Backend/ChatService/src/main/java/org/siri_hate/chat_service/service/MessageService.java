@@ -34,6 +34,7 @@ public class MessageService {
     private final ChatService chatService;
     private final FileService fileService;
     private final ChatMemberRepository chatMemberRepository;
+    private final ChatListNotifier chatListNotifier;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
@@ -52,6 +53,7 @@ public class MessageService {
             ChatService chatService,
             FileService fileService,
             ChatMemberRepository chatMemberRepository,
+            ChatListNotifier chatListNotifier,
             ObjectProvider<KafkaTemplate<String, String>> kafkaTemplateProvider,
             ObjectProvider<ObjectMapper> objectMapperProvider
     ) {
@@ -61,6 +63,7 @@ public class MessageService {
         this.chatService = chatService;
         this.fileService = fileService;
         this.chatMemberRepository = chatMemberRepository;
+        this.chatListNotifier = chatListNotifier;
         this.kafkaTemplate = kafkaTemplateProvider.getIfAvailable();
         this.objectMapper = objectMapperProvider.getIfAvailable(ObjectMapper::new);
         this.httpClient = HttpClient.newHttpClient();
@@ -83,6 +86,7 @@ public class MessageService {
         message.setChat(chatService.getChatEntity(request.getChatId()));
         messageRepository.save(message);
         MessageResponseDTO response = enrichWithImageUrl(messageMapper.toMessageResponse(message), message.getImageKey());
+        chatListNotifier.notifyAllMembersOfChat(request.getChatId());
         publishMessageNotification(message, senderUsername);
         return response;
     }

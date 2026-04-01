@@ -18,6 +18,7 @@ import {
     unmuteChatNotifications,
 } from '../../../api/chatClient';
 import chatWsClient from '../../../api/chatWsClient';
+import chatListWsClient from '../../../api/chatListWsClient';
 
 function MyChats() {
     const [chats, setChats] = useState([]);
@@ -72,6 +73,7 @@ function MyChats() {
     const selectedChatRef = useRef(selectedChat);
     selectedChatRef.current = selectedChat;
     const fileInputRef = useRef(null);
+    const fetchMyChatsRef = useRef(null);
 
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -120,7 +122,8 @@ function MyChats() {
         });
     };
 
-    const fetchMyChats = async (page, append = false) => {
+    const fetchMyChats = async (page, append = false, options = {}) => {
+        const { syncSelected = false } = options;
         try {
             const response = await fetchChatsApi(page, CHAT_PAGE_SIZE);
             if (!response.ok) throw new Error('Failed to fetch chats');
@@ -129,7 +132,15 @@ function MyChats() {
             if (append) {
                 setChats(prev => [...prev, ...(data.content || [])]);
             } else {
-                setChats(data.content || []);
+                const list = data.content || [];
+                setChats(list);
+                if (syncSelected) {
+                    setSelectedChat(prev => {
+                        if (!prev) return prev;
+                        const found = list.find(c => Number(c.id) === Number(prev.id));
+                        return found ? { ...found } : prev;
+                    });
+                }
             }
             return data;
         } catch (err) {
@@ -140,6 +151,8 @@ function MyChats() {
             setLoadingMore(false);
         }
     };
+
+    fetchMyChatsRef.current = fetchMyChats;
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -181,6 +194,15 @@ function MyChats() {
 
         loadInitial();
     }, []);
+
+    useEffect(() => {
+        if (!currentUsername) return undefined;
+        const refreshChatsFromServer = () => {
+            fetchMyChatsRef.current(0, false, { syncSelected: true }).catch(() => {});
+        };
+        chatListWsClient.connect(refreshChatsFromServer);
+        return () => chatListWsClient.disconnect();
+    }, [currentUsername]);
 
     const connectToWebSocket = (chatId) => {
         pendingHistoryPageRef.current = 0;
