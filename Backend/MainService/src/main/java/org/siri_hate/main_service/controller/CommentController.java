@@ -33,8 +33,6 @@ public class CommentController implements ProjectCommentApi, NewsCommentApi, Art
         this.articleCommentService = articleCommentService;
     }
 
-    // ==================== Project Comments ====================
-
     @Override
     public ResponseEntity<CommentResponseDTO> createProjectComment(Long projectId, String xUserName, CommentRequestDTO commentRequestDTO) {
         var response = commentService.createComment(xUserName, projectId, commentRequestDTO);
@@ -53,8 +51,6 @@ public class CommentController implements ProjectCommentApi, NewsCommentApi, Art
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // ==================== News Comments ====================
-
     @Override
     public ResponseEntity<CommentResponseDTO> createNewsComment(Long newsId, String xUserName, CommentRequestDTO commentRequestDTO) {
         var response = newsCommentService.createComment(xUserName, newsId, commentRequestDTO);
@@ -72,8 +68,6 @@ public class CommentController implements ProjectCommentApi, NewsCommentApi, Art
         var response = newsCommentService.getNewsComments(newsId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    // ==================== Article Comments ====================
 
     @Override
     public ResponseEntity<CommentResponseDTO> createArticleComment(Long articleId, String xUserName, CommentRequestDTO commentRequestDTO) {
